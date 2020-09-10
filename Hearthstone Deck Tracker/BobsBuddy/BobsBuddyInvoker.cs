@@ -52,6 +52,7 @@ namespace Hearthstone_Deck_Tracker.BobsBuddy
 		private const string LichKingHeroPowerId = NonCollectible.Neutral.RebornRitesTavernBrawl;
 		private const string LichKingHeroPowerEnchantmentId = NonCollectible.Neutral.RebornRites_RebornRiteEnchantmentTavernBrawl;
 		private static bool _removedLichKingHeroPowerFromMinion = false;
+		public static bool CanRemoveLichKing = true;
 
 
 		public static BobsBuddyInvoker GetInstance(Guid gameId, int turn, bool createInstanceIfNoneFound = true)
@@ -83,6 +84,8 @@ namespace Hearthstone_Deck_Tracker.BobsBuddy
 		static BobsBuddyInvoker()
 		{
 			Log.OnLogLine += AddHDTLogLine;
+			Random lichKingRandom = new Random();
+			CanRemoveLichKing = lichKingRandom.NextDouble() > .5;
 		}
 
 		static void AddHDTLogLine(string toLog)
@@ -190,7 +193,7 @@ namespace Hearthstone_Deck_Tracker.BobsBuddy
 				BobsBuddyDisplay.HidePercentagesShowSpinners();
 
 				_removedLichKingHeroPowerFromMinion = false;
-				if(_minionHeroPowerTrigger != null)
+				if(_minionHeroPowerTrigger != null && CanRemoveLichKing)
 				{
 					var minion = _minionHeroPowerTrigger.Minion;
 					var start = DateTime.Now;
